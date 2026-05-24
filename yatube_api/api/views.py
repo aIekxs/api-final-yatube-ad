@@ -8,7 +8,7 @@ from rest_framework.permissions import (
 from django.db import IntegrityError
 from rest_framework import status
 from rest_framework.response import Response
-
+from rest_framework.pagination import LimitOffsetPagination
 from .permissions import IsAuthorOrReadOnly
 from .pagination import PostPagination
 from posts.models import Post, Group, Comment, Follow
@@ -24,7 +24,21 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
-    pagination_class = PostPagination
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Если есть параметры limit или offset - используем пагинацию
+        if 'limit' in request.query_params or 'offset' in request.query_params:
+            paginator = LimitOffsetPagination()
+            page = paginator.paginate_queryset(queryset, request)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return paginator.get_paginated_response(serializer.data)
+
+        # Иначе возвращаем обычный список
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     def get_serializer_class(self):
         if self.action == 'list':
