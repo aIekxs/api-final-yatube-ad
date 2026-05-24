@@ -2,7 +2,6 @@ from rest_framework.relations import SlugRelatedField
 from posts.models import Post, Group, Comment
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from rest_framework.validators import UniqueTogetherValidator
 
 from posts.models import Comment, Post, Follow
 

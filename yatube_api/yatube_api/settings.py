@@ -1,6 +1,7 @@
 from pathlib import Path
-
 from datetime import timedelta
+from datetime import timedelta
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -91,8 +92,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = ((BASE_DIR / 'static/'),)
 
-import os
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -114,8 +113,6 @@ REST_FRAMEWORK = {
         'anon': '1000/day',  # Лимит для AnonRateThrottle
     },
 }
-
-from datetime import timedelta
 
 SIMPLE_JWT = {
     # Устанавливаем срок жизни токена
