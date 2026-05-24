@@ -10,7 +10,6 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.pagination import LimitOffsetPagination
 from .permissions import IsAuthorOrReadOnly
-from .pagination import PostPagination
 from posts.models import Post, Group, Comment, Follow
 from .serializers import (
     PostSerializer, PostListSerializer,
