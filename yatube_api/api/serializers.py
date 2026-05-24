@@ -67,7 +67,8 @@ class CommentListSerializer(serializers.ModelSerializer):
 
 class FollowSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(
-        read_only=True, slug_field='username'
+        read_only=True,
+        slug_field='username'
     )
     following = serializers.SlugRelatedField(
         queryset=User.objects.all(), slug_field='username'
@@ -76,16 +77,10 @@ class FollowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Follow
         fields = ('user', 'following')
-        validators = [
-            serializers.UniqueTogetherValidator(
-                queryset=Follow.objects.all(),
-                fields=('user', 'following'),
-                message='Вы уже подписаны на этого пользователя.'
-            )
-        ]
+        read_only_fields = ('user',)
 
     def validate_following(self, value):
-        """Проверка подписки на себя"""
+        # Проверка подписки на себя
         user = self.context['request'].user
         if user == value:
             raise serializers.ValidationError(
@@ -99,7 +94,7 @@ class FollowListSerializer(serializers.ModelSerializer):
         read_only=True, slug_field='username'
     )
     following = serializers.SlugRelatedField(
-        read_only=True, slug_field='username'
+        queryset=User.objects.all(), slug_field='username'
     )
 
     class Meta:
