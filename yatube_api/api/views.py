@@ -10,6 +10,7 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from .permissions import IsAuthorOrReadOnly
+from .pagination import PostPagination
 from posts.models import Post, Group, Comment, Follow
 from .serializers import (
     PostSerializer, PostListSerializer,
@@ -23,6 +24,7 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
+    pagination_class = PostPagination
 
     def get_serializer_class(self):
         if self.action == 'list':
